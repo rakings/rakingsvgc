@@ -464,14 +464,14 @@ var NCAT=[["money","Money tournament","Nuovi tornei con montepremi in denaro."],
 function npOn(k){return k==="money"?!!NP.money:!!NP[k]}
 var ONESIGNAL_APP_ID="";
 var REM=[];try{REM=JSON.parse(localStorage.getItem("vgc-rem")||"[]")}catch(e){}
-window.OneSignalDeferred=window.OneSignalDeferred||[];
-function osdo(fn){if(ONESIGNAL_APP_ID==="demo")fn({User:{addTag:function(){},removeTag:function(){},addTags:function(){}},Notifications:{permission:true,requestPermission:function(){return Promise.resolve()}}});else OneSignalDeferred.push(fn)}
-if(ONESIGNAL_APP_ID&&ONESIGNAL_APP_ID!=="demo"){var B=location.pathname.replace(/[^\/]*$/,"");var osc=document.createElement("script");osc.src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";osc.defer=true;document.head.appendChild(osc);OneSignalDeferred.push(function(OS){return OS.init({appId:ONESIGNAL_APP_ID,serviceWorkerPath:B+"sw.js",serviceWorkerParam:{scope:B}})})}
-function osTags(){var t={};NCAT.forEach(function(c){var k=c[0];t["c_"+k]=npOn(k)?(k==="money"?(NP.money==="33"?"33":"all"):"1"):"0";t["h_"+k]=(NP.h&&NP.h[k])?"1":"0"});return t}
-function osSync(){if(ONESIGNAL_APP_ID)osdo(function(OS){OS.User.addTags(osTags())})}
-function npSave(){try{localStorage.setItem(NPK,JSON.stringify(NP))}catch(e){}}
-function npTopic(k){return NTFY_PREFIX+"-"+(k==="money"&&NP.money==="33"?"money33":k)}
-function npHtml(){var act=NCAT.filter(function(c){return npOn(c[0])});
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+window.OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+    appId: "eba93d46-8989-448a-918a-044c210fbc4c",
+    serviceWorkerPath: "rakingsvgc/OneSignalSDKWorker.js",
+    serviceWorkerParam: { scope: "/rakingsvgc/" }
+  });
+});
 var h='<div class="sheet2" role="document"><div class="calbar"><b id="np-t">Impostazioni</b><button class="cnav" data-npc="1" aria-label="Chiudi">✕</button></div>'+langRow()+'<h2 style="font-size:1.05rem;margin:14px 0 4px">Notifiche personalizzate</h2><p class="meta" style="margin:0 0 8px">Scegli solo quello che ti interessa: riceverai avvisi soltanto sulle categorie attivate. Niente spam dei tornei che non ti riguardano.</p>';
 NCAT.forEach(function(c){var k=c[0];h+='<div class="opt"><label class="sw"><input type="checkbox" data-np="'+k+'"'+(npOn(k)?' checked':'')+'><span>'+c[1]+'<small>'+c[2]+'</small></span></label>';
 if(k==="money"&&npOn("money"))h+='<div class="sub"><label><input type="radio" name="npm" data-npm="all"'+(NP.money!=="33"?' checked':'')+'> Tutti i money tournament</label><label><input type="radio" name="npm" data-npm="33"'+(NP.money==="33"?' checked':'')+'> Solo quelli che superano 33 iscritti</label></div>';
